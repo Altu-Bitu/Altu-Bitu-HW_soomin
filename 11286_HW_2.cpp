@@ -21,9 +21,9 @@ struct cmp{
         if(abs(a) == abs(b)){
             return a>b;
         }
-        else{
-            return abs(a)>abs(b);
-        }
+        
+        return abs(a)>abs(b);  // 수정 : 기존에 else문 썼었는데 else 사용할 필요 없음 
+       
     }
 };
 
