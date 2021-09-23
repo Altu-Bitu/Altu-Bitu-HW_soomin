@@ -29,10 +29,8 @@ int identifier(string var){
         return 0;
     // 3. '_' 연속해서 2번 이상 나올 때
     for(int i=0; i<var.length()-1; i++){
-        if(var[i] == '_'){
-            if(var[i+1] == '_'){
-                return 0;
-            }
+        if(var[i] == '_' && var[i+1] == '_'){
+            return 0;
         }
     }
     if(var.find('_') != string::npos){ // 3. '_'와 대문자 동시에 공존하는 경우
@@ -55,25 +53,36 @@ int identifier(string var){
 
     return 0;
 }
+
 // 언어 형식 바꿔주는 함수
-string changeVariable(string var){
-    int language = identifier(var); // 0: 에러, 1: JAVA, 2: C++
-    if(language == 1){ // 자바일 때 : 대문자 앞에 '_' 넣고, 대문자->소문자
-        for(int i=0; i<var.length(); i++){
-            if(isupper(var[i])){
-                var[i] = tolower(var[i]);
-                var.insert(i,"_");
-            }
+// 1. 자바일 때 : 대문자 앞에 '_' 넣고, 대문자->소문자
+void javaToC(string var){
+    for(int i=0; i<var.length(); i++){
+        if(isupper(var[i])){
+            var[i] = tolower(var[i]);
+            var.insert(i,"_");
         }
     }
-    else if(language == 2){ // C++일 때 : '_' 삭제하고, 뒤의 소문자 -> 대문자
-        for(int i=0; i<var.length(); i++){
-            if(var[i] == '_'){
-                if(i != var.length()-1)
-                    var[i+1]=toupper(var[i+1]);
-                var.erase(i,1); //i번째부터 1의 길이의 문자열을 자른다
-            }
+}
+
+// 2. C++일 때 : '_' 삭제하고, 뒤의 소문자 -> 대문자
+void cToJava(string var){
+    for(int i=0; i<var.length(); i++){
+        if(var[i] == '_'){
+            if(i != var.length()-1)
+                var[i+1]=toupper(var[i+1]);
+            var.erase(i,1); //i번째부터 1의 길이의 문자열을 자른다
         }
+    }
+}
+
+string changeVariable(string var){
+    int language = identifier(var); // 0: 에러, 1: JAVA, 2: C++
+    if(language == 1){
+        javaToC(var);
+    }
+    else if(language == 2){
+        cToJava(var);
     }
     else{
         return "Error!";
